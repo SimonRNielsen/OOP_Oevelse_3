@@ -6,29 +6,33 @@ using System.Threading.Tasks;
 
 namespace Øvelse4
 {
+    /// <summary>
+    /// Lite version of car-mechanic simulator
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// Main program
+        /// </summary>
+        /// <param name="args">Arguements for program initiation</param>
         static void Main(string[] args)
         {
-            string inputOwner = string.Empty;
-            string inputLicenseplate = string.Empty;
-            string inputType = string.Empty;
             bool openShop = true;
             Queue<Vehicle> carShop = new Queue<Vehicle>();
             Stack<Vehicle> repairedCars = new Stack<Vehicle>();
             while (openShop)
             {
-                var keypress = Console.ReadKey(true);
-                Console.WriteLine("Tryk A for at tilføje en bil\nTryk S for at reparere en bil\nTryk C for at se reparerede og ventende biler\nTryk escape for at lukke butikken");
-                switch (keypress.Key)
+                Console.Clear();
+                Console.WriteLine("Tryk A for at tilføje en bil\nTryk R for at reparere en bil\nTryk P for at se reparerede og ventende biler\nTryk Escape for at lukke butikken");
+                switch (Console.ReadKey(true).Key)
                 {
                     case ConsoleKey.A:
                         AddNewVehicle(carShop);
                         break;
-                    case ConsoleKey.S:
+                    case ConsoleKey.R:
                         RepairCar(carShop, repairedCars);
                         break;
-                    case ConsoleKey.D:
+                    case ConsoleKey.P:
                         PrintCars(carShop, repairedCars);
                         break;
                     case ConsoleKey.Escape:
@@ -39,61 +43,52 @@ namespace Øvelse4
                 }
             }
         }
-
+        #region Functions
         /// <summary>
-        /// 
+        /// Function to add a new car to the queue needing repairs
         /// </summary>
-        /// <param name="queue"></param>
+        /// <param name="queue">Queue for cars needing repair</param>
         static void AddNewVehicle(Queue<Vehicle> queue)
         {
-            Console.Clear();
-            string inputOwner = string.Empty;
-            string inputLicenseplate = string.Empty;
-            string inputType = string.Empty;
+            string inputOwner;
+            string inputLicenseplate;
+            string inputType;
             bool invalidInput = true;
+            Vehicle vehicle = null;
             while (invalidInput)
             {
-                Console.WriteLine("Input client name:");
+                Console.Clear();
+                Console.WriteLine("Klientens navn:");
                 inputOwner = Console.ReadLine();
-                Console.WriteLine("Input car licenseplate");
+                Console.WriteLine("Bilens nummerplade");
                 inputLicenseplate = Console.ReadLine();
-                Console.WriteLine("Input cartype (Pickup/Hatchback/Van)");
+                Console.WriteLine("Bilens type (Pickup/Hatchback/Van)");
                 inputType = Console.ReadLine();
                 switch (inputType.ToLower())
                 {
                     case "pickup":
+                        vehicle = new Pickup(inputOwner, inputLicenseplate);
                         invalidInput = false;
                         break;
                     case "hatchback":
+                        vehicle = new Hatchback(inputOwner, inputLicenseplate);
                         invalidInput = false;
                         break;
                     case "van":
+                        vehicle = new Van(inputOwner, inputLicenseplate);
                         invalidInput = false;
                         break;
                     default:
                         break;
                 }
             }
-            Vehicle vehicle = null;
-            switch (inputType.ToLower())
-            {
-                case "pickup":
-                    vehicle = new Pickup(inputOwner, inputLicenseplate);
-                    break;
-                case "hatchback":
-                    vehicle = new Hatchback(inputOwner, inputLicenseplate);
-                    break;
-                case "van":
-                    vehicle = new Van(inputOwner, inputLicenseplate);
-                    break;
-            }
             queue.Enqueue(vehicle);
         }
         /// <summary>
-        /// 
+        /// Function to initiate repair of first car in the queue
         /// </summary>
-        /// <param name="queue"></param>
-        /// <param name="stack"></param>
+        /// <param name="queue">Repairqueue</param>
+        /// <param name="stack">Finished cars</param>
         static void RepairCar(Queue<Vehicle> queue, Stack<Vehicle> stack)
         {
             Console.Clear();
@@ -101,60 +96,37 @@ namespace Øvelse4
             Console.WriteLine("Cars in repairqueue now:");
             foreach (Vehicle car in queue)
             {
-                if (car == null)
-                {
-                    Console.WriteLine("No cars in queue");
-                }
-                else
-                {
-                    Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
-                }
+                Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
             }
-            Console.WriteLine("Repaired cars now:");
+            Console.WriteLine("\nRepaired cars now:");
             foreach (Vehicle car in stack)
             {
-                if (car == null)
-                {
-                    Console.WriteLine("No cars repaired");
-                }
-                else
-                {
-                    Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
-                }
+                Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
             }
+            Console.WriteLine("\nTryk enter for at fortsætte");
+            Console.ReadKey();
         }
         /// <summary>
-        /// 
+        /// Function to view the repairqueue and cars already repaired
         /// </summary>
-        /// <param name="queue"></param>
-        /// <param name="stack"></param>
+        /// <param name="queue">Repairqueue</param>
+        /// <param name="stack">Finished cars</param>
         static void PrintCars(Queue<Vehicle> queue, Stack<Vehicle> stack)
         {
             Console.Clear();
             Console.WriteLine("Cars in repairqueue:");
             foreach (Vehicle car in queue)
             {
-                if (car == null)
-                {
-                    Console.WriteLine("No cars in queue");
-                }
-                else
-                {
-                    Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
-                }
+                Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
             }
-            Console.WriteLine("Repaired cars:");
+            Console.WriteLine("\nRepaired cars:");
             foreach (Vehicle car in stack)
             {
-                if (car == null)
-                {
-                    Console.WriteLine("No cars repaired");
-                }
-                else
-                {
-                    Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
-                }
+                Console.WriteLine(car.Owner + " " + car.Licenseplate + " " + car.Type);
             }
+            Console.WriteLine("\nTryk enter for at fortsætte");
+            Console.ReadKey();
         }
+        #endregion
     }
 }
