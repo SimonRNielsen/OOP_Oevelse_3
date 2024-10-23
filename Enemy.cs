@@ -15,6 +15,6 @@ namespace OOP_Oevelse_3
             this.Name = name;
         }
 
-        public string Name { get => name; set => name = value; }
+        public string Name { get => name; private set => name = value; }
     }
 }
